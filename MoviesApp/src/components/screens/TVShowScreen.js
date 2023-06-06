@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MovieList from '../lists/MovieList';
 
-const MovieScreen = () => {
+const TVShowScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [movieData, setMovieData] = useState([]);
 
@@ -40,13 +40,14 @@ const MovieScreen = () => {
 
     return (
         <>
-            {!isLoading && <MovieList movies={movieData} />}
-            <StatusBar style="auto" />
+            <Text>TVSHOWS</Text>
+            {/* {!isLoading && <MovieList movies={movieData} />}
+            <StatusBar style="auto" /> */}
         </>
     );
 }
 
-export default MovieScreen;
+export default TVShowScreen;
 
 const styles = StyleSheet.create({
     container: {
