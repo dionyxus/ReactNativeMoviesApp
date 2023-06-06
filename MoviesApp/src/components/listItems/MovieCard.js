@@ -7,6 +7,17 @@ const MovieCard = props => {
       <VStack space={4} divider={<Divider />}>
         <Center>
           <Heading size='xs'>{label}</Heading>
+          <Image alt={label} source={{ uri: image }} size='xs' />
+          <Button
+            // onPress={() => {
+            //   navigation.navigate('Show', {
+            //     label,
+            //     uri
+            //   })
+            // }}
+          >
+            More Details
+          </Button>
         </Center>
       </VStack>
     </Box>

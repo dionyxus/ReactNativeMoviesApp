@@ -9,6 +9,7 @@ const MovieList = props => {
       renderItem={({ item }) => (
         <MovieCard
           label={item.title}
+          image={item.image}
         />
       )}
     />
@@ -16,3 +17,5 @@ const MovieList = props => {
 }
 
 export default MovieList
+
+///https://image.tmdb.org/t/p/original/qNBAXBIQlnOThrVvA6mA2B5ggV6.jpg
