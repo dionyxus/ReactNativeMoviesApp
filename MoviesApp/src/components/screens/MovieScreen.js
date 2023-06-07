@@ -2,8 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MovieList from '../lists/MovieList';
+import {Button} from 'native-base'
 
-const MovieScreen = () => {
+
+const MovieScreen = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [movieData, setMovieData] = useState([]);
 
@@ -40,7 +42,7 @@ const MovieScreen = () => {
 
     return (
         <>
-            {!isLoading && <MovieList movies={movieData} />}
+            {!isLoading && <MovieList movies={movieData} navigation={navigation} />}
             <StatusBar style="auto" />
         </>
     );

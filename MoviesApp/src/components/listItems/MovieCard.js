@@ -9,12 +9,11 @@ const MovieCard = props => {
           <Heading size='xs'>{label}</Heading>
           <Image alt={label} source={{ uri: image }} size='xs' />
           <Button
-            // onPress={() => {
-            //   navigation.navigate('Show', {
-            //     label,
-            //     uri
-            //   })
-            // }}
+            onPress={() => {
+              navigation.navigate('Details', {
+                title:label
+              })
+            }}
           >
             More Details
           </Button>
