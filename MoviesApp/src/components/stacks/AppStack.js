@@ -1,8 +1,19 @@
-import MovieScreen from "../screens/MovieScreen"
+import { NavigationContainer } from '@react-navigation/native';
+import AppTabs from './AppTabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import DetailScreen from '../screens/DetailScreen';
+
+const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
   return (
-    <MovieScreen/>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false }} />
+        <Stack.Screen name="Details" component={DetailScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+
   )
 }
 

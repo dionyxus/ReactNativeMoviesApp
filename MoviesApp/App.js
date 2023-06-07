@@ -6,7 +6,7 @@ import AppTabs from './src/components/stacks/AppTabs'
 const App = () => {
   return (
     <NativeBaseProvider>
-      <AppTabs />
+      <AppStack />
       <StatusBar style='auto' />
     </NativeBaseProvider>
   )
