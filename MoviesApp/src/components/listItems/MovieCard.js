@@ -1,26 +1,40 @@
-import { Box, Button, Center, Divider, Heading, Image, Text, VStack } from 'native-base'
+import { Box, Button, Center, Divider, Heading, Image, Text, VStack, View } from 'native-base'
+import { StyleSheet } from 'react-native';
 
 const MovieCard = props => {
-  const { image, label, source, uri, navigation } = props
+  const { image, label, popularity, releasedate, navigation } = props
   return (
-    <Box borderWidth={1}>
-      <VStack space={4} divider={<Divider />}>
-        <Center>
+    <View>
+      <View style={styles.card}>
+        <Image alt={label} source={{ uri: image }} size='md' />
+        <View style={styles.details}>
           <Heading size='xs'>{label}</Heading>
-          <Image alt={label} source={{ uri: image }} size='xs' />
+          <Text>Popularity: {popularity}</Text>
+          <Text>Release Date: {releasedate}</Text>
           <Button
             onPress={() => {
               navigation.navigate('Details', {
-                title:label
+                title: label
               })
             }}
           >
             More Details
           </Button>
-        </Center>
-      </VStack>
-    </Box>
+        </View>
+      </View>
+    </View>
   )
 }
 
 export default MovieCard
+
+styles = StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  details: {
+    paddingLeft: 10
+  }
+})

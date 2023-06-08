@@ -10,6 +10,8 @@ const MovieList = props => {
         <MovieCard
           label={item.title}
           image={item.image}
+          popularity={item.popularity}
+          releasedate={item.releasedate}
           navigation = {navigation}
         />
       )}
