@@ -2,12 +2,19 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MovieList from '../lists/MovieList';
-import {Button} from 'native-base'
+import { Picker } from '@react-native-picker/picker';
 
+const MOVIE_FILTER = {
+    nowPlaying : "now_playing",
+    popular: "popular",
+    topRated: "top_rated",
+    upcoming: "upcoming"
+}
 
 const MovieScreen = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [movieData, setMovieData] = useState([]);
+    const [filter, setFilter] = useState(MOVIE_FILTER.nowPlaying);
 
     const options = {
         method: 'GET',
@@ -21,12 +28,12 @@ const MovieScreen = ({ navigation }) => {
 
     useEffect(() => {
         fetchMovies();
-    }, [])
+    }, [filter])
 
     const fetchMovies = () => {
         setIsLoading(true);
 
-        fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
+        fetch('https://api.themoviedb.org/3/movie/' + filter, options)
             .then(response => response.json())
             .then(response => {
                 //console.log(response);
@@ -42,6 +49,17 @@ const MovieScreen = ({ navigation }) => {
 
     return (
         <>
+            <Picker
+                selectedValue={filter}
+                mode='dialog'
+                onValueChange={(itemValue, itemIndex) =>
+                    setFilter(itemValue)
+                }>
+                <Picker.Item label="Now Playing" value={MOVIE_FILTER.nowPlaying} />
+                <Picker.Item label="Popular" value={MOVIE_FILTER.popular} />
+                <Picker.Item label="Top Rated" value={MOVIE_FILTER.topRated} />
+                <Picker.Item label="Upcoming" value={MOVIE_FILTER.upcoming} />
+            </Picker>
             {!isLoading && <MovieList movies={movieData} navigation={navigation} />}
             <StatusBar style="auto" />
         </>
