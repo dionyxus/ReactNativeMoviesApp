@@ -2,7 +2,7 @@ import { FlatList } from 'native-base'
 import MovieCard from '../listItems/MovieCard'
 
 const MovieList = props => {
-  const { movies, navigation } = props
+  const { movies, navigation, type } = props
   return (
     <FlatList
       data={movies}
@@ -14,6 +14,7 @@ const MovieList = props => {
           releasedate={item.releasedate}
           id={item.id}
           navigation = {navigation}
+          type={type}
         />
       )}
     />

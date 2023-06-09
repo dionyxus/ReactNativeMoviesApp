@@ -24,7 +24,7 @@ const DetailScreen = ({ route }) => {
 
   const fetchMovie = () => {
 
-    fetch('https://api.themoviedb.org/3/movie/' + route.params.id, options)
+    fetch('https://api.themoviedb.org/3/' + route.params.type + '/' + route.params.id, options)
       .then(response => response.json())
       .then(response => {
 
@@ -41,8 +41,8 @@ const DetailScreen = ({ route }) => {
     <View>
       {!isLoading && <View >
         <Center>
-          <Heading style={styles.detailcard}>{data.title}</Heading>
-          <Image style={styles.detailcard} alt={data.title} source={{ uri: imagePath + data.poster_path }} size='2xl' />
+          <Heading style={styles.detailcard}>{route.params.type === 'movie' ? data.title : data.name}</Heading>
+          <Image style={styles.detailcard} alt={route.params.type === 'movie' ? data.title : data.name} source={{ uri: imagePath + data.poster_path }} size='2xl' />
           <Text style={styles.detailcard}>{data.overview}</Text>
           <Text style={styles.detailcard}>
             Popularity: {data.popularity} | Release Date: {data.release_date}

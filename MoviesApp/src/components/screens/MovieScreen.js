@@ -61,7 +61,7 @@ const MovieScreen = ({ navigation }) => {
                     <Select.Item label="Upcoming" value={MOVIE_FILTER.upcoming} />
                 </Select>
             </View>
-            {!isLoading && <MovieList movies={movieData} navigation={navigation} />}
+            {!isLoading && <MovieList movies={movieData} navigation={navigation} type={"movie"}/>}
             <StatusBar style="auto" />
         </View>
     );

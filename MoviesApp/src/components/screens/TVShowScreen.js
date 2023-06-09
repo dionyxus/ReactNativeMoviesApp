@@ -2,16 +2,25 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MovieList from '../lists/MovieList';
+import { Select } from 'native-base'
 
-const TVShowScreen = () => {
-    const [isLoading, setIsLoading] = useState(false);
+const TV_FILTER = {
+    airingToday: "airing_today",
+    onTheAir: "on_the_air",
+    popular: "popular",
+    topRated: "top_rated"
+}
+
+const MovieScreen = ({ navigation }) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [movieData, setMovieData] = useState([]);
+    const [filter, setFilter] = useState(TV_FILTER.airingToday);
 
     const options = {
         method: 'GET',
         headers: {
             accept: 'application/json',
-            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MjhhM2Y0MWQ3NDgyNTAyYzM2YjA5MWRmMDJlMDYxMiIsInN1YiI6IjYyZWI0ZGYyODU2NmQyMDA2Mjc2ZmMxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-sSeSSkC-rso-IiQwi_obj3b_hL7CgoErNQ9xvRJNFU'
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZGEzMDlkMjBiN2QyMTkyMjBmNTczNTNhMjMyZWE5MiIsInN1YiI6IjYyZWI0ZGYyODU2NmQyMDA2Mjc2ZmMxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.knOvpRGUiC40-YOGMcgWhBYiKxTw1a_aOTlkc6H2LTA'
         }
     };
 
@@ -19,35 +28,46 @@ const TVShowScreen = () => {
 
     useEffect(() => {
         fetchMovies();
-    }, [])
+    }, [filter])
 
     const fetchMovies = () => {
-        setIsLoading(true);
 
-        fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
+        fetch('https://api.themoviedb.org/3/tv/' + filter, options)
             .then(response => response.json())
             .then(response => {
                 //console.log(response);
-                let data = response.results.map(item => ({ id: item.id, title: item.title, releasedate: item.release_date, popularity: item.popularity, image: imagePath + item.poster_path }));
+                let data = response.results.map(item => ({ id: item.id, title: item.name, releasedate: "", popularity: item.popularity, image: imagePath + item.poster_path }));
                 setMovieData(data);
-                //console.log(data);
+                setIsLoading(false);
+
             })
             .catch(err => console.error(err));
 
-        setIsLoading(false);
 
     }
 
     return (
-        <>
-            <Text>TVSHOWS</Text>
-            {/* {!isLoading && <MovieList movies={movieData} />}
-            <StatusBar style="auto" /> */}
-        </>
+        <View>
+            <View style={styles.picker}>
+                <Select
+                    selectedValue={filter}
+                    minWidth="200"
+                    onValueChange={(itemValue, itemIndex) =>
+                        setFilter(itemValue)
+                    }>
+                    <Select.Item label="Airing Today" value={TV_FILTER.airingToday} />
+                    <Select.Item label="On The Air" value={TV_FILTER.onTheAir} />
+                    <Select.Item label="Popular" value={TV_FILTER.popular} />
+                    <Select.Item label="Top Rated" value={TV_FILTER.topRated} />
+                </Select>
+            </View>
+            {!isLoading && <MovieList movies={movieData} navigation={navigation} type={"tv"} />}
+            <StatusBar style="auto" />
+        </View>
     );
 }
 
-export default TVShowScreen;
+export default MovieScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -56,4 +76,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    picker: {
+        marginTop: 20,
+        marginBottom: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 80
+    }
 });
