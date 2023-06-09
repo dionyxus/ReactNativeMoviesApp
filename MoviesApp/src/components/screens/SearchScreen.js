@@ -1,26 +1,25 @@
-import { StyleSheet, TextInput, View, Button } from 'react-native'
+import { StyleSheet, TextInput, View } from 'react-native'
+import { Button, Text, Select } from 'native-base'
 import React from 'react'
 import MovieList from '../lists/MovieList';
-import { Picker } from '@react-native-picker/picker';
-
 
 const SEARCH_FILTER = {
-    movie : "movie",
-    multi : "multi"
+    movie: "movie",
+    multi: "multi"
 }
 
 const SearchScreen = ({ navigation }) => {
     const [searchText, setSearchText] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true);
     const [movieData, setMovieData] = React.useState([]);
-    const [filter, setFilter] = React.useState(SEARCH_FILTER.movie);
+    const [filter, setFilter] = React.useState(SEARCH_FILTER.multi);
 
     const options = {
         method: 'GET',
         headers: {
             accept: 'application/json',
             Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZGEzMDlkMjBiN2QyMTkyMjBmNTczNTNhMjMyZWE5MiIsInN1YiI6IjYyZWI0ZGYyODU2NmQyMDA2Mjc2ZmMxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.knOvpRGUiC40-YOGMcgWhBYiKxTw1a_aOTlkc6H2LTA'
-          }
+        }
     };
 
     const imagePath = "https://image.tmdb.org/t/p/original/";
@@ -47,28 +46,34 @@ const SearchScreen = ({ navigation }) => {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
+            <Text>Search Movie/TV Show Name<Text style={{color:'red'}}>*</Text></Text>
             <TextInput
                 style={styles.input}
                 onChangeText={setSearchText}
                 value={searchText}
                 placeholder='i.e James Bond'
             />
-            <Button
-                onPress={fetchMovies}
-                title='Search'
-            >
-                Search
-            </Button>
-            <Picker
-                selectedValue={filter}
-                mode='dialog'
-                onValueChange={(itemValue, itemIndex) =>
-                    setFilter(itemValue)
-                }>
-                <Picker.Item label="Movies" value={SEARCH_FILTER.movie} />
-                <Picker.Item label="Multi" value={SEARCH_FILTER.multi} />
-            </Picker>
+            <Text>Choose Search Type<Text style={{color:'red'}}>*</Text></Text>
+            <View style={styles.search}>
+                <View style={styles.picker}>
+                    <Select
+                        selectedValue={filter}
+                        onValueChange={(itemValue, itemIndex) =>
+                            setFilter(itemValue)
+                        }>
+                        <Select.Item label="multi" value={SEARCH_FILTER.multi} />
+                        <Select.Item label="movie" value={SEARCH_FILTER.movie} />
+                    </Select>
+                </View>
+                <View style={styles.searchButton}>
+                    <Button
+                        onPress={fetchMovies}
+                        title='Search'>
+                        Search
+                    </Button>
+                </View>
+            </View>
             {!isLoading && <MovieList movies={movieData} navigation={navigation} />}
         </View>
     )
@@ -83,4 +88,21 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
     },
+    container: {
+        paddingHorizontal: 30,
+        marginTop: 30
+    },
+    picker: {
+        width: 150
+    },
+    search: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 20,
+        marginBottom: 30
+    },
+    searchButton: {
+        width: 150
+    }
 });

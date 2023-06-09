@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MovieList from '../lists/MovieList';
-import { Picker } from '@react-native-picker/picker';
+import { Select } from 'native-base'
 
 const MOVIE_FILTER = {
-    nowPlaying : "now_playing",
+    nowPlaying: "now_playing",
     popular: "popular",
     topRated: "top_rated",
     upcoming: "upcoming"
@@ -21,7 +21,7 @@ const MovieScreen = ({ navigation }) => {
         headers: {
             accept: 'application/json',
             Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZGEzMDlkMjBiN2QyMTkyMjBmNTczNTNhMjMyZWE5MiIsInN1YiI6IjYyZWI0ZGYyODU2NmQyMDA2Mjc2ZmMxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.knOvpRGUiC40-YOGMcgWhBYiKxTw1a_aOTlkc6H2LTA'
-          }
+        }
     };
 
     const imagePath = "https://image.tmdb.org/t/p/original/";
@@ -47,21 +47,23 @@ const MovieScreen = ({ navigation }) => {
     }
 
     return (
-        <>
-            <Picker
-                selectedValue={filter}
-                mode='dialog'
-                onValueChange={(itemValue, itemIndex) =>
-                    setFilter(itemValue)
-                }>
-                <Picker.Item label="Now Playing" value={MOVIE_FILTER.nowPlaying} />
-                <Picker.Item label="Popular" value={MOVIE_FILTER.popular} />
-                <Picker.Item label="Top Rated" value={MOVIE_FILTER.topRated} />
-                <Picker.Item label="Upcoming" value={MOVIE_FILTER.upcoming} />
-            </Picker>
+        <View>
+            <View style={styles.picker}>
+                <Select
+                    selectedValue={filter}
+                    minWidth="200"
+                    onValueChange={(itemValue, itemIndex) =>
+                        setFilter(itemValue)
+                    }>
+                    <Select.Item label="Now Playing" value={MOVIE_FILTER.nowPlaying} />
+                    <Select.Item label="Popular" value={MOVIE_FILTER.popular} />
+                    <Select.Item label="Top Rated" value={MOVIE_FILTER.topRated} />
+                    <Select.Item label="Upcoming" value={MOVIE_FILTER.upcoming} />
+                </Select>
+            </View>
             {!isLoading && <MovieList movies={movieData} navigation={navigation} />}
             <StatusBar style="auto" />
-        </>
+        </View>
     );
 }
 
@@ -74,4 +76,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    picker: {
+        marginTop: 20,
+        marginBottom: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 80
+    }
 });
