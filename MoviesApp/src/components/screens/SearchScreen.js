@@ -9,10 +9,11 @@ const SEARCH_FILTER = {
 }
 
 const SearchScreen = ({ navigation }) => {
-    const [searchText, setSearchText] = React.useState('');
+    const [searchText, setSearchText] = React.useState();
     const [isLoading, setIsLoading] = React.useState(true);
     const [movieData, setMovieData] = React.useState([]);
     const [filter, setFilter] = React.useState(SEARCH_FILTER.multi);
+    const [validationText, setValidationText] = React.useState('Please initiate a search');
 
     const options = {
         method: 'GET',
@@ -25,7 +26,9 @@ const SearchScreen = ({ navigation }) => {
     const imagePath = "https://image.tmdb.org/t/p/original/";
 
     React.useEffect(() => {
-        fetchMovies();
+        if (searchText !== undefined && searchText !== '' && searchText !== null) {
+            fetchMovies();
+        }
     }, [filter])
 
     const fetchMovies = () => {
@@ -35,7 +38,7 @@ const SearchScreen = ({ navigation }) => {
         fetch(queryURL, options)
             .then(response => response.json())
             .then(response => {
-                //console.log(response);
+
                 let data = response.results.map(item => ({ id: item.id, title: item.title, releasedate: item.release_date, popularity: item.popularity, image: imagePath + item.poster_path }));
                 setMovieData(data);
                 setIsLoading(false);
@@ -47,20 +50,22 @@ const SearchScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text>Search Movie/TV Show Name<Text style={{color:'red'}}>*</Text></Text>
+
+            <Text>Search Movie/TV Show Name<Text style={{ color: 'red' }}>*</Text></Text>
             <TextInput
                 style={styles.input}
                 onChangeText={setSearchText}
                 value={searchText}
                 placeholder='i.e James Bond'
             />
-            <Text>Choose Search Type<Text style={{color:'red'}}>*</Text></Text>
+            <Text>Choose Search Type<Text style={{ color: 'red' }}>*</Text></Text>
             <View style={styles.search}>
                 <View style={styles.picker}>
                     <Select
                         selectedValue={filter}
-                        onValueChange={(itemValue, itemIndex) =>
-                            setFilter(itemValue)
+                        onValueChange={(itemValue, itemIndex) => {
+                            setFilter(itemValue);
+                        }
                         }>
                         <Select.Item label="multi" value={SEARCH_FILTER.multi} />
                         <Select.Item label="movie" value={SEARCH_FILTER.movie} />
@@ -68,13 +73,21 @@ const SearchScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.searchButton}>
                     <Button
-                        onPress={fetchMovies}
+                        onPress={() => {
+                            if (searchText === '' || searchText === undefined) {
+                                setValidationText("Movie/TV Show name is required.")
+                            } else
+                                fetchMovies();
+                        }}
                         title='Search'>
                         Search
                     </Button>
                 </View>
             </View>
-            {!isLoading && <MovieList movies={movieData} navigation={navigation} />}
+            {isLoading
+                ? <Text style={styles.searchText}>{validationText}</Text>
+                : <MovieList movies={movieData} navigation={navigation} type={"movie"} />
+            }
         </View>
     )
 }
@@ -104,5 +117,11 @@ const styles = StyleSheet.create({
     },
     searchButton: {
         width: 150
+    },
+    searchText: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 90,
+        marginVertical: 200,
     }
 });
