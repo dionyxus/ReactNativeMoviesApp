@@ -11,7 +11,7 @@ const SEARCH_FILTER = {
 
 const SearchScreen = ({ navigation }) => {
     const [searchText, setSearchText] = React.useState('');
-    const [isLoading, setIsLoading] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [movieData, setMovieData] = React.useState([]);
     const [filter, setFilter] = React.useState(SEARCH_FILTER.movie);
 
@@ -19,8 +19,8 @@ const SearchScreen = ({ navigation }) => {
         method: 'GET',
         headers: {
             accept: 'application/json',
-            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MjhhM2Y0MWQ3NDgyNTAyYzM2YjA5MWRmMDJlMDYxMiIsInN1YiI6IjYyZWI0ZGYyODU2NmQyMDA2Mjc2ZmMxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-sSeSSkC-rso-IiQwi_obj3b_hL7CgoErNQ9xvRJNFU'
-        }
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZGEzMDlkMjBiN2QyMTkyMjBmNTczNTNhMjMyZWE5MiIsInN1YiI6IjYyZWI0ZGYyODU2NmQyMDA2Mjc2ZmMxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.knOvpRGUiC40-YOGMcgWhBYiKxTw1a_aOTlkc6H2LTA'
+          }
     };
 
     const imagePath = "https://image.tmdb.org/t/p/original/";
@@ -30,9 +30,8 @@ const SearchScreen = ({ navigation }) => {
     }, [filter])
 
     const fetchMovies = () => {
-        setIsLoading(true);
 
-        const queryURL = 'https://api.themoviedb.org/3/search/' + filter + "?" + "query=" + encodeURIComponent(searchText);
+        const queryURL = 'https://api.themoviedb.org/3/search/' + filter + "?query=" + encodeURIComponent(searchText);
         console.log(queryURL)
         fetch(queryURL, options)
             .then(response => response.json())
@@ -40,11 +39,10 @@ const SearchScreen = ({ navigation }) => {
                 //console.log(response);
                 let data = response.results.map(item => ({ id: item.id, title: item.title, releasedate: item.release_date, popularity: item.popularity, image: imagePath + item.poster_path }));
                 setMovieData(data);
+                setIsLoading(false);
                 //console.log(data);
             })
             .catch(err => console.error(err));
-
-        setIsLoading(false);
 
     }
 

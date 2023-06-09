@@ -2,7 +2,7 @@ import { Box, Button, Center, Divider, Heading, Image, Text, VStack, View } from
 import { StyleSheet } from 'react-native';
 
 const MovieCard = props => {
-  const { image, label, popularity, releasedate, navigation } = props
+  const { id, image, label, popularity, releasedate, navigation } = props
   return (
     <View>
       <View style={styles.card}>
@@ -14,7 +14,7 @@ const MovieCard = props => {
           <Button
             onPress={() => {
               navigation.navigate('Details', {
-                title: label
+                id: id
               })
             }}
           >
@@ -26,9 +26,7 @@ const MovieCard = props => {
   )
 }
 
-export default MovieCard
-
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     paddingLeft: 10,
@@ -38,3 +36,6 @@ styles = StyleSheet.create({
     paddingLeft: 10
   }
 })
+
+export default MovieCard
+

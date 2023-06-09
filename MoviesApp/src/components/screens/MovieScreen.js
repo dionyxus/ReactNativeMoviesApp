@@ -12,7 +12,7 @@ const MOVIE_FILTER = {
 }
 
 const MovieScreen = ({ navigation }) => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [movieData, setMovieData] = useState([]);
     const [filter, setFilter] = useState(MOVIE_FILTER.nowPlaying);
 
@@ -20,8 +20,8 @@ const MovieScreen = ({ navigation }) => {
         method: 'GET',
         headers: {
             accept: 'application/json',
-            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MjhhM2Y0MWQ3NDgyNTAyYzM2YjA5MWRmMDJlMDYxMiIsInN1YiI6IjYyZWI0ZGYyODU2NmQyMDA2Mjc2ZmMxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-sSeSSkC-rso-IiQwi_obj3b_hL7CgoErNQ9xvRJNFU'
-        }
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZGEzMDlkMjBiN2QyMTkyMjBmNTczNTNhMjMyZWE5MiIsInN1YiI6IjYyZWI0ZGYyODU2NmQyMDA2Mjc2ZmMxYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.knOvpRGUiC40-YOGMcgWhBYiKxTw1a_aOTlkc6H2LTA'
+          }
     };
 
     const imagePath = "https://image.tmdb.org/t/p/original/";
@@ -31,7 +31,6 @@ const MovieScreen = ({ navigation }) => {
     }, [filter])
 
     const fetchMovies = () => {
-        setIsLoading(true);
 
         fetch('https://api.themoviedb.org/3/movie/' + filter, options)
             .then(response => response.json())
@@ -39,11 +38,11 @@ const MovieScreen = ({ navigation }) => {
                 //console.log(response);
                 let data = response.results.map(item => ({ id: item.id, title: item.title, releasedate: item.release_date, popularity: item.popularity, image: imagePath + item.poster_path }));
                 setMovieData(data);
-                //console.log(data);
+                setIsLoading(false);
+
             })
             .catch(err => console.error(err));
 
-        setIsLoading(false);
 
     }
 

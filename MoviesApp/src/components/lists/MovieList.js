@@ -12,6 +12,7 @@ const MovieList = props => {
           image={item.image}
           popularity={item.popularity}
           releasedate={item.releasedate}
+          id={item.id}
           navigation = {navigation}
         />
       )}
